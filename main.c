@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-							IFTTT IOT BUTTON
+			IFTTT IOT BUTTON
 *******************************************************************************
 */
 // Standard includes
@@ -72,13 +72,13 @@ unsigned long  g_ulStatus = 0;//SimpleLink Status
 unsigned long  g_ulGatewayIP = 0; //Network Gateway IP address
 unsigned char  g_ucConnectionSSID[SSID_LEN_MAX+1]; //Connection SSID
 unsigned char  g_ucConnectionBSSID[BSSID_LEN_MAX]; //Connection BSSID
-SlSockAddrIn_t   Addr;								//Structure for Socket Details
+SlSockAddrIn_t   Addr;							//Structure for Socket Details
 int    iAddrSize;
-int iSockID;										//Socket Descriptor
-int iStatus;										//Signed to check the status of sl_connect
+int iSockID;								//Socket Descriptor
+int iStatus;								//Signed to check the status of sl_connect
 bool deviceConnected = false;						//Variable indicating the device connection status
-bool ipAcquired = false;							//Variable indicating IP address acquiring status
-OsiMsgQ_t Int_Msg;									//Message Queue
+bool ipAcquired = false;						//Variable indicating IP address acquiring status
+OsiMsgQ_t Int_Msg;							//Message Queue
 
 #if defined(gcc)
 extern void (* const g_pfnVectors[])(void);
@@ -87,13 +87,13 @@ extern void (* const g_pfnVectors[])(void);
 extern uVectorEntry __vector_table;
 #endif
 //*****************************************************************************
-//                		 GLOBAL VARIABLES -- End
+//                GLOBAL VARIABLES -- End
 //*****************************************************************************
 
 
 
 //****************************************************************************
-//                      LOCAL FUNCTION PROTOTYPES
+//             	 LOCAL FUNCTION PROTOTYPES
 //****************************************************************************
 static long WlanConnect();
 void Wlan_Task( void *pvParameters );
@@ -182,14 +182,14 @@ static void InitializeInterrupts()
 	MAP_GPIOIntTypeSet(GPIOA1_BASE, GPIO_PIN_5,GPIO_FALLING_EDGE);				//Set the Interrupt as Falling Edge and on GPIO_PIN_5
 	osi_InterruptRegister(INT_GPIOA1,(P_OSI_INTR_ENTRY)SW2IntHandler, \
 	                                INT_PRIORITY_LVL_1);
-	MAP_GPIOIntClear(GPIOA1_BASE,GPIO_PIN_5);									//Initally Clear any pending Interrupt
-	MAP_GPIOIntEnable(GPIOA1_BASE,GPIO_INT_PIN_5);								//Enable the Interrupt
+	MAP_GPIOIntClear(GPIOA1_BASE,GPIO_PIN_5);						//Initally Clear any pending Interrupt
+	MAP_GPIOIntEnable(GPIOA1_BASE,GPIO_INT_PIN_5);						//Enable the Interrupt
 
 	MAP_GPIOIntTypeSet(GPIOA2_BASE, GPIO_PIN_6,GPIO_FALLING_EDGE);				//Set the Interrupt as Falling Edge and on GPIO_PIN_6
 	osi_InterruptRegister(INT_GPIOA2,(P_OSI_INTR_ENTRY)SW3IntHandler, \
 		                                INT_PRIORITY_LVL_1);
-	MAP_GPIOIntClear(GPIOA2_BASE,GPIO_PIN_6);									//Initally Clear any pending Interrupt
-	MAP_GPIOIntEnable(GPIOA2_BASE,GPIO_INT_PIN_6);								//Enable the Interrupt
+	MAP_GPIOIntClear(GPIOA2_BASE,GPIO_PIN_6);						//Initally Clear any pending Interrupt
+	MAP_GPIOIntEnable(GPIOA2_BASE,GPIO_INT_PIN_6);						//Enable the Interrupt
 }
 
 
@@ -386,18 +386,17 @@ void Wlan_Task( void *pvParameters )
 
     while (1)
     {
-     		osi_MsgQRead( &Int_Msg, &RecvQue, OSI_WAIT_FOREVER);
+     	osi_MsgQRead( &Int_Msg, &RecvQue, OSI_WAIT_FOREVER);
 
-     		if(PUSH_BUTTON_SW2_PRESSED == RecvQue){
+     	if(PUSH_BUTTON_SW2_PRESSED == RecvQue){
+     		UART_PRINT("SW2 Pressed\r\n");
+     		deviceConnected = false;
+     		ipAcquired = false;
+     		//Start Smart Config Mode
+     		Smart_Config();
+     	}
 
-     			UART_PRINT("SW2 Pressed\r\n");
-     			deviceConnected = false;
-     			ipAcquired = false;
-     			//Start Smart Config Mode
-     			Smart_Config();
-     		}
-
-     		osi_Sleep(50);
+     	osi_Sleep(50);
     }
 }
 
@@ -415,11 +414,11 @@ void Event( void *pvParameters )
 	 osi_messages RecvQue;
 	 while(1)
 	 {
-		 osi_MsgQRead( &Int_Msg, &RecvQue, OSI_WAIT_FOREVER);
-		 if(PUSH_BUTTON_SW3_PRESSED == RecvQue){
-			 	 IFTTT_Trigger();
-			 }
-		 	 osi_Sleep(50);
+		osi_MsgQRead( &Int_Msg, &RecvQue, OSI_WAIT_FOREVER);
+		if(PUSH_BUTTON_SW3_PRESSED == RecvQue){
+			IFTTT_Trigger();
+		}
+		 osi_Sleep(50);
 	 }
 }
 
