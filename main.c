@@ -44,11 +44,11 @@
 //Post Data Value for SW3 button
 #define POST_VALUE "{\"value1\" : \"\", \"value2\" : \"SW3\", \"value3\" : \"\" }"
 
-#define WLAN_DEL_ALL_PROFILES   0xFF
-#define TASK1_STACK_SIZE	  1024
-#define TASK2_STACK_SIZE      6000
-#define TASK1_PRIORITY		  1
-#define TASK2_PRIORITY        2
+#define WLAN_DEL_ALL_PROFILE	0xFF
+#define TASK1_STACK_SIZE	1024
+#define TASK2_STACK_SIZE	6000
+#define TASK1_PRIORITY		1
+#define TASK2_PRIORITY        	2
 
 // Application specific status/error codes
 typedef enum{
@@ -72,8 +72,8 @@ unsigned long  g_ulStatus = 0;//SimpleLink Status
 unsigned long  g_ulGatewayIP = 0; //Network Gateway IP address
 unsigned char  g_ucConnectionSSID[SSID_LEN_MAX+1]; //Connection SSID
 unsigned char  g_ucConnectionBSSID[BSSID_LEN_MAX]; //Connection BSSID
-SlSockAddrIn_t   Addr;							//Structure for Socket Details
-int    iAddrSize;
+SlSockAddrIn_t  Addr;							//Structure for Socket Details
+int iAddrSize;
 int iSockID;								//Socket Descriptor
 int iStatus;								//Signed to check the status of sl_connect
 bool deviceConnected = false;						//Variable indicating the device connection status
